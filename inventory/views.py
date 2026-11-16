@@ -60,6 +60,7 @@ def adjust_stock(request):
     quantity = request.data.get("quantity")
     movement_type = request.data.get("movement_type", "marekebisho")
     note = request.data.get("note", "")
+    reference_id = request.data.get("reference_id")   # ✅ MPYA
 
     if not product_id or not store_id or quantity is None:
         return Response(
@@ -85,6 +86,7 @@ def adjust_stock(request):
             movement_type=movement_type,
             quantity=qty,
             unit_cost=product.cost_price,
+            reference_id=reference_id,      # ✅ MPYA
             reference_type="adjustment",
             note=note,
             created_by=request.user,
