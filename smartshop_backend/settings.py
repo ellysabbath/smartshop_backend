@@ -149,7 +149,7 @@ DEFAULT_FROM_EMAIL = "qfix910@gmail.com"
 # SMS — AFRICA'S TALKING (hard-coded)
 # ==================================================================
 AT_USERNAME = "OmaFlowers"
-AT_API_KEY = "atsk_414ffa1da62566318b917d03d67bad4e8e53945a9a86e1ff3fcbd6f781e5443afd8d1010"
+AT_API_KEY = "atsk_667dea841fe36033e874535ee4b632a40cb09a82736800da92248e70f152c7393ab0b1da"
 AT_SENDER_ID = "OMA Flowers"
 AT_BASE_URL = "https://api.africastalking.com/version1/messaging"
 

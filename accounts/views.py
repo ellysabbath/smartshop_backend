@@ -693,3 +693,42 @@ def user_detail(request, pk):
     # ------------------------------------------------------------------
     user.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def reset_password(request):
+    phone = (request.data.get("phone") or "").strip()
+    code = (request.data.get("code") or "").strip()
+    new_password = request.data.get("new_password") or ""
+
+    if not phone or not code or not new_password:
+        return Response({"detail": "Taarifa hazijakamilika"}, status=status.HTTP_400_BAD_REQUEST)
+
+    otp = (
+        OTPCode.objects.filter(
+            phone=phone, code=code, purpose="reset",
+            is_used=False, expires_at__gt=timezone.now(),
+        )
+        .order_by("-created_at")
+        .first()
+    )
+    if not otp:
+        return Response({"detail": "OTP si sahihi au imeisha muda"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user = User.objects.get(phone=phone)
+    except User.DoesNotExist:
+        return Response({"detail": "Mtumiaji hajapatikana"}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        validate_password(new_password, user)
+    except ValidationError as e:
+        return Response({"detail": e.messages[0]}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.set_password(new_password)
+    user.save(update_fields=["password"])
+
+    otp.is_used = True
+    otp.save(update_fields=["is_used"])
+
+    return Response({"detail": "Nywila imebadilishwa"})

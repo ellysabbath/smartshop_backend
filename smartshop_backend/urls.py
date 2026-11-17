@@ -20,4 +20,5 @@ urlpatterns = [
     path("api/expenses/", include("expenses.urls")),
     path("api/finance/", include("finance.urls")),
     path("api/reports/", include("reports.urls")),
+    path("api/", include("accounts.mmilikiUrls")),
 ]
